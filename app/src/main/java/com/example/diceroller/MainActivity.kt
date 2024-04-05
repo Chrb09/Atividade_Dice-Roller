@@ -10,10 +10,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -46,7 +48,9 @@ fun DiceRollerApp() {
 
 @Composable
 fun DiceWithButtonAndImage(modifier: Modifier = Modifier) {
+    var textField by remember { mutableStateOf( " ") }
     var result by remember { mutableIntStateOf(1) }
+    var sucess by remember { mutableStateOf( "Tente Adivinhar o Número!") }
     val imageResource = when (result){
         1 -> R.drawable.dice_1
         2 -> R.drawable.dice_2
@@ -55,6 +59,7 @@ fun DiceWithButtonAndImage(modifier: Modifier = Modifier) {
         5 -> R.drawable.dice_5
         else -> R.drawable.dice_6
     }
+
     Column (
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -64,10 +69,32 @@ fun DiceWithButtonAndImage(modifier: Modifier = Modifier) {
             contentDescription = result.toString()
         )
         Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            "$sucess"
+        )
+        OutlinedTextField(
+            value = textField,
+            onValueChange = {textField = it},
+            label = { Text(stringResource(R.string.guess_label))},
+            isError = textField.isNotEmpty() && !isValidText(textField)
+        )
 
-        Button(onClick = { result = (1..6).random()}) {
+
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(onClick = {
+            result = (1..6).random()
+            sucess = when (result.toString()){
+                textField -> "Você Adivinhou Corretamente!"
+                else -> "Tente Novamente"
+            }
+            textField = ""
+        }) {
         Text(stringResource(R.string.roll))
         }
 
     }
+}
+fun isValidText(text: String): Boolean {
+
+    return text.matches(Regex("[a-zA-Z]+"))
 }
