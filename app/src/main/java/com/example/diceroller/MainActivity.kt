@@ -22,8 +22,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.diceroller.ui.theme.DiceRollerTheme
 
 class MainActivity : ComponentActivity() {
@@ -64,23 +66,6 @@ fun DiceWithButtonAndImage(modifier: Modifier = Modifier) {
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Image(
-            painter = painterResource(imageResource) ,
-            contentDescription = result.toString()
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            "$sucess"
-        )
-        OutlinedTextField(
-            value = textField,
-            onValueChange = {textField = it},
-            label = { Text(stringResource(R.string.guess_label))},
-            isError = textField.isNotEmpty() && !isValidText(textField)
-        )
-
-
-        Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = {
             result = (1..6).random()
             sucess = when (textField){
@@ -90,9 +75,28 @@ fun DiceWithButtonAndImage(modifier: Modifier = Modifier) {
             }
             textField = ""
         }) {
-        Text(stringResource(R.string.roll))
-        }
+            Text(
+                text= stringResource(R.string.roll),
+                fontSize = 20.sp,
+                fontWeight = Bold,
+            )
 
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            "$sucess",
+            fontSize = 20.sp,
+        )
+        OutlinedTextField(
+            value = textField,
+            onValueChange = {textField = it},
+            label = { Text(stringResource(R.string.guess_label))},
+            isError = textField.isNotEmpty() && !isValidText(textField)
+        )
+        Image(
+            painter = painterResource(imageResource) ,
+            contentDescription = result.toString()
+        )
     }
 }
 fun isValidText(text: String): Boolean {
