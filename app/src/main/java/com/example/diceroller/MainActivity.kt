@@ -83,9 +83,10 @@ fun DiceWithButtonAndImage(modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = {
             result = (1..6).random()
-            sucess = when (result.toString()){
-                textField -> "Você Adivinhou Corretamente!"
-                else -> "Tente Novamente"
+            sucess = when (textField){
+                result.toString() -> "Você Adivinhou Corretamente! ($result)"
+                "1", "2", "3", "4", "5", "6"-> "Tente Novamente"
+                else ->  "Digite um número de 1 à 6"
             }
             textField = ""
         }) {
